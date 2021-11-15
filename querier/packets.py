@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright© 2014 by Marc Culler and others.
@@ -38,14 +38,14 @@ class Packet(object):
     """
     Base class for internet packets.
     """
-    _data = ''
+    _data = b''
     def __init__(self):
         self.format = '!'+''.join([self.formats[f]
                                    for f in self.fields])
         self.length = self.hdr_length = struct.calcsize(self.format)
         self.length = LENGTH(self.length)
 
-    def __str__(self):
+    def bytes(self):
         self.compute_checksum()
         return self.header() + self._data
 
@@ -67,8 +67,8 @@ class Packet(object):
     def data(self):
         return self._data
     @data.setter
-    def data(self, data):
-        self._data = str(data)
+    def data(self, new_data):
+        self._data = new_data
         self.length = LENGTH(self.hdr_length + len(self._data))
         
 class IGMPv2Packet(Packet):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright© 2014 by Marc Culler and others.
@@ -17,15 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with QuerierD.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, netifaces
-from ConfigParser import ConfigParser
+import sys, os, netifaces
+from configparser import ConfigParser
 from . import Querier
 
 config_file = '/etc/querierd'
 
 def main():
     if os.getuid() != 0:
-        print 'You must be root to run a querier.'
+        print('You must be root to run a querier.')
         sys.exit(1)
 
     config = ConfigParser()
@@ -38,7 +38,7 @@ def main():
         raise ValueError(
             'Interface %s not found. Please check %s .'%(interface, config_file)
         )
-    print 'querier service starting. Using address %s'%ip
+    print('querier service starting. Using address %s'%ip)
     Querier(ip, query_interval).run()
 
 if __name__ == "__main__":

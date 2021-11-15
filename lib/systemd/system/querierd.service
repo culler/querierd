@@ -4,5 +4,5 @@
 Description=Multicast querier daemon
 
 [Service]
-ExecStart=/usr/bin/python -m querier.service
+ExecStart=/usr/bin/python3 -m querier.service
 Restart=always

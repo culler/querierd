@@ -21,13 +21,13 @@ set -e
 
 case "$1" in
   start)
-	exec python -m querier.daemon start
+	exec python3 -m querier.daemon start
 	;;
   stop)
-	exec python -m querier.daemon stop
+	exec python3 -m querier.daemon stop
 	;;
   restart)
-	exec python -m querier.daemon restart
+	exec python3 -m querier.daemon restart
 	;;
   status)
 	if [ -s /var/run/$NAME.pid ]; then

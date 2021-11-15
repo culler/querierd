@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright© 2014 by Marc Culler and others.
@@ -62,7 +62,7 @@ class Querier:
         ip.ttl = 1
         ip.src = self.source_address
         ip.dst = all_routers
-        ip.data = igmp
+        ip.data = igmp.data
     
     def run(self):
         syslog.syslog('Querier starting.')
@@ -70,7 +70,7 @@ class Querier:
         while True:
             elapsed = self.listener.elapsed()
             if self.elected:
-                self.socket.sendto(str(self.packet), (all_routers, 0))
+                self.socket.sendto(self.packet.bytes(), (all_routers, 0))
                 if elapsed < self.interval:
                     self.elected = False
                     syslog.syslog('Lost querier election. Pausing.')
@@ -112,11 +112,15 @@ class QueryListener:
     def listen(self):
         while True:
             data, address = self.socket.recvfrom(65565)
-            if ord(data[20]) == 17: # make sure we got a query packet
-                if self._ip_as_int(address[0]) < self.address:
-                    self.lock.acquire()
-                    self._timestamp = time.time()
-                    self.lock.release()
+            # make sure we got a query packet
+            try:
+                if data[20] == 17:
+                    if self._ip_as_int(address[0]) < self.address:
+                        self.lock.acquire()
+                        self._timestamp = time.time()
+                        self.lock.release()
+            except IndexError:
+                pass
     
     def elapsed(self):
         """

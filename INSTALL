@@ -5,9 +5,9 @@ There are two steps to installing QuerierD.  First you need to
 install a python package named querier, as well as the package
 netifaces, which QuerierD uses.
 
-If you have python setuptools installed, then the command
+If you have python3 setuptools installed, then the command
 
-python setup.py install
+python3 setup.py install
 
 should install both packages, as needed.  (Note, however, that
 installing netifaces may require a C compiler.) If you don't
@@ -67,7 +67,7 @@ OS X
 
   SECOND: edit ./Library/LaunchDaemons/org.querierd to use the
   same python as you used to install the package.  (Default is
-  /Library/Frameworks/Python.framework/Versions/2.7/bin/python).
+  /Library/Frameworks/Python.framework/Versions/Current/bin/python3).
 
   THEN:
   sudo cp etc/querierd /etc/querierd
@@ -81,7 +81,7 @@ Testing
 
 After starting the daemon by
 
-$ sudo python -m querier.daemon start
+$ sudo python3 -m querier.daemon start
 
 you can run tcpdump and watch the IGMP traffic:
 
@@ -96,4 +96,4 @@ $ avahi-browse -at
 
 To stop the daemon:
 
-$sudo python -m querier.daemon stop
+$ sudo python3 -m querier.daemon stop
