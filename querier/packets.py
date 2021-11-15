@@ -47,7 +47,7 @@ class Packet(object):
 
     def bytes(self):
         self.compute_checksum()
-        return self.header() + self._data
+        return self.header() + self.data
 
     def header(self):
         values = [getattr(self, field) for field in self.fields]
@@ -69,14 +69,14 @@ class Packet(object):
     @data.setter
     def data(self, new_data):
         self._data = new_data
-        self.length = LENGTH(self.hdr_length + len(self._data))
+        self.length = LENGTH(self.hdr_length + len(new_data))
         
 class IGMPv2Packet(Packet):
     fields = ['_type', '_max_response_time', 'checksum', '_group']
     formats = {'_type':'B', '_max_response_time':'B', 'checksum':'H',
                '_group':'I'}
     _type = 0
-    _max_response_time = 0
+    _max_response_time = 100
     checksum = 0
     _group = 0
 

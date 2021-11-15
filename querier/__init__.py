@@ -62,7 +62,7 @@ class Querier:
         ip.ttl = 1
         ip.src = self.source_address
         ip.dst = all_routers
-        ip.data = igmp.data
+        ip.data = igmp.bytes()
     
     def run(self):
         syslog.syslog('Querier starting.')
