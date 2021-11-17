@@ -18,9 +18,9 @@
 # along with QuerierD.  If not, see <http://www.gnu.org/licenses/>.
 
 import os, sys, socket, time, struct, threading, syslog, signal
-from .packets import IPv4Packet, IGMPv2Packet
+from .packets import *
 
-version = '0.1'
+version = '0.2'
 __all__ = ['Querier']
 
 all_routers = '224.0.0.1'
@@ -52,10 +52,9 @@ class Querier:
         signal.signal(signal.SIGTERM, sigterm_handler)
         
     def build_query_packet(self):
-        igmp = IGMPv2Packet()
+        igmp = IGMPv3Packet()
         igmp.type = 'query'
-        #max_response_time should be 0 for a v1 query
-        #igmp.max_response_time = 100
+        igmp.max_response_time = 100
 
         self.packet = ip = IPv4Packet()
         ip.protocol = socket.IPPROTO_IGMP

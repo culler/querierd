@@ -71,6 +71,7 @@ class Packet(object):
         self._data = new_data
         self.length = LENGTH(self.hdr_length + len(new_data))
         
+
 class IGMPv2Packet(Packet):
     fields = ['_type', '_max_response_time', 'checksum', '_group']
     formats = {'_type':'B', '_max_response_time':'B', 'checksum':'H',
@@ -102,14 +103,23 @@ class IGMPv2Packet(Packet):
     def group(self, addr):
         self._group = struct.unpack("!I", socket.inet_aton(addr))[0]  
 
+class IGMPv3Packet(IGMPv2Packet):
+    fields = ['_type', '_max_response_time', 'checksum', '_group', '_v3_info']
+    formats = {'_type':'B', '_max_response_time':'B', 'checksum':'H',
+               '_group':'I', '_v3_info':'I'}
+    _v3_info = 0x00
+    
 class IPv4Packet(Packet):
+    """
+    An IP v4 packet with the Router Alert option.
+    """
     fields = ['version_ihl', 'tos', 'length', '_id',
               'flags_offset', '_ttl', '_protocol', 'checksum',
-              '_src', '_dst']
+              '_src', '_dst', 'RA']
     formats = {'version_ihl':'B', 'tos':'B', 'length':'H',
-               '_id':'H', 'flags_offset':'H', '_ttl':'B',
-               '_protocol':'B', 'checksum':'H', '_src':'I', '_dst':'I'}
-    version_ihl = 0x45
+               '_id':'H', 'flags_offset':'H', '_ttl':'B', '_protocol':'B',
+               'checksum':'H', '_src':'I', '_dst':'I', 'RA':'I'}
+    version_ihl = 0x46
     tos = 0
     _id = 0
     flags_offset = 0
@@ -118,6 +128,7 @@ class IPv4Packet(Packet):
     checksum = 0
     _src = 0
     _dst = 0
+    RA = 0x94040000
 
     @property
     def protocol(self):
